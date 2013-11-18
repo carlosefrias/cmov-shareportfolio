@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AndroidplotExample</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_simple_xyplot">Graph Activity</string>
+    <!-- SelecQuotesEvolution Activity -->
+	<string name="title_activity_select_quotes_evolution">Share Evolution</string>
+	<string name = "tick_name_label">Select the tick name</string>
+	<string name = "periodicity_label">Select the periodicity</string>
+	<string name = "see_evolution_button">See share evolution</string>
+	<!-- END SelecQuotesEvolution -->
+</resources>
