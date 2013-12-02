@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AndroidplotExample</string>
+    <string name="app_name">Share portfolio</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_simple_xyplot">Graph Activity</string>
     <!-- SelecQuotesEvolution Activity -->
-	<string name="title_activity_select_quotes_evolution">Share Evolution</string>
-	<string name = "tick_name_label">Select the tick name</string>
-	<string name = "periodicity_label">Select the periodicity</string>
-	<string name = "see_evolution_button">See share evolution</string>
-	<!-- END SelecQuotesEvolution -->
+    <string name="title_activity_select_quotes_evolution">Share Evolution</string>
+    <string name="tick_name_label">Select the tick name</string>
+    <string name="periodicity_label">Select the periodicity</string>
+    <string name="see_evolution_button">See share evolution</string>
+    <string name="title_evolution_graph">Evolution chart</string>
+    <!-- END SelecQuotesEvolution -->
+
+    <string name="title_activity_add_shares">AddSharesActivity</string>
+    <!-- Strings for the dialogs to add and remove share -->
+    <string name="add_share">Add Share</string>
+    <string name="remove_share">Remove Share</string>
+    <string name="title_add_share">Add Share Dialog</string>
+    <string name="title_remove_share">Delete Share Dialog</string>
+    <string name="positive_add_button_label">Add</string>
+    <string name="positive_remove_button_label">Remove</string>
+    <string name="negative_button_label">Cancel</string>
+    <string name="hint_type_share_company">Write the company tick name</string>
+    <!-- END Dialogs -->
+
+
+    <!-- MainActivity strings -->
+    <string name="my_shares_string">My shares portfolio</string>
+    <string name="search_shares_string">Search shares</string>
+    <string name="share_evolution">See share evolution</string>
+    <!-- End MainActivity -->
+    <string name="title_activity_simple_pie_chart">SimplePieChartActivity</string>
+
 </resources>
