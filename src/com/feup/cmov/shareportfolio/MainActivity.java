@@ -1,13 +1,15 @@
 package com.feup.cmov.shareportfolio;
 
-import android.os.Bundle;
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
+import entities.SimpleQuoteDB;
 
 public class MainActivity extends Activity implements OnClickListener{
 	
@@ -40,9 +42,26 @@ public class MainActivity extends Activity implements OnClickListener{
 			Intent newIntent = new Intent(this.getApplicationContext(), SelectQuotesEvolution.class);
 			startActivity(newIntent);
 		}
-		else if(v.getId()==mySharesButton.getId()){
+		else if(v.getId()== mySharesButton.getId()){
 			Intent newIntent = new Intent(this.getApplicationContext(), SimplePieChartActivity.class);
+			Bundle bundle = new Bundle();
+			ArrayList<SimpleQuoteDB> quotes = new ArrayList<SimpleQuoteDB>();
+			//TODO: Load quotes from database
+			//FOR NOW
+			int[] array = {12, 8, 4, 15, 5};
+			String[] ticks = {"GOOG", "IBM", "DELL", "AMZN", "AAPL"};
+			double[] values = {12.0, 15.3, 7.5, 4.8, 17.3};
+			for(int i = 0; i < array.length; i++){
+				SimpleQuoteDB quote = new SimpleQuoteDB(ticks[i], array[i], values[i]);
+				quotes.add(quote);
+			}
+			System.out.println(quotes);
+			bundle.putSerializable("quotes", quotes);
+			newIntent.putExtras(bundle);
 			startActivity(newIntent);			
+		}
+		else if(v.getId() == searchButton.getId()){
+			
 		}
 	}
 

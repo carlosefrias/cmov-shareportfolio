@@ -110,6 +110,7 @@ public final class R {
         public static final int title_activity_simple_xyplot=0x7f060003;
         public static final int title_add_share=0x7f06000c;
         public static final int title_evolution_graph=0x7f060008;
+        public static final int title_pie_chart=0x7f060016;
         public static final int title_remove_share=0x7f06000d;
     }
     public static final class style {
@@ -145,8 +146,5 @@ public final class R {
         public static final int line_point_formatter_with_plf1=0x7f040000;
         public static final int line_point_formatter_with_plf2=0x7f040001;
         public static final int pie_segment_formatter1=0x7f040002;
-        public static final int pie_segment_formatter2=0x7f040003;
-        public static final int pie_segment_formatter3=0x7f040004;
-        public static final int pie_segment_formatter4=0x7f040005;
     }
 }
