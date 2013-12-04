@@ -28,8 +28,8 @@
 
     <!-- MainActivity strings -->
     <string name="my_shares_string">My share portfolio</string>
-    <string name="search_shares_string">Search share values</string>
-    <string name="share_evolution">See share evolution</string>
+    <string name="search_shares_string">Consult stock values</string>
+    <string name="share_evolution">Consult stock evolution</string>
     <!-- End MainActivity -->
     <string name="title_activity_simple_pie_chart">My shares</string>
     <string name="title_pie_chart">Pie chart</string>

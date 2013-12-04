@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.R.layout;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -14,11 +13,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.EmbossMaskFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.NumberPicker;
@@ -45,7 +45,13 @@ public class SimplePieChartActivity extends Activity {
 	private ArrayList<Segment> sectors;
 	private ArrayList<SimpleQuoteDB> quotes;
 	//TODO: Put here all company names...
-	private final static String[] companyNames = new String [] {"IBM", "MSFT", "DELL", "CSCO", "AMZN", "HPQ", "GOOG", "AAPL", "ORCL"};
+	private final static String[] companyNames = new String [] {"FOXA","ATVI","ADBE","AKAM","ALXN","ALTR","AMZN","MGN","ADI","AAPL",
+		"AMAT","ADSK","ADP","AVGO","BIDU","BBBY","BIIB","BRCM","CHRW","CA","CTRX","CELG","CERN","CHTR","CHKP","CSCO","CTXS","CTSH",
+		"CMCSA","COST","DELL","XRAY","DTV","DISCA","DLTR","EBAY","EQIX","EXPE","EXPD","ESRX","FFIV","FB","FAST","FISV","FOSL","GRMN",
+		"GILD","GOOG","GMCR","HSIC","INTC","INTU","ISRG","KLAC","KRFT","LBTYA","LINTA","LMCA","LLTC","MAT","MXIM","MCHP","MU","MSFT",
+		"MDLZ","MNST","MYL","NTAP","NFLX","NUAN","NVDA","ORLY","PCAR","PAYX","PCLN","QCOM","GOLD","REGN","ROST","SNDK","SBAC","STX",
+		"SHLD","SIAL","SIRI","SPLS","SBUX","SRCL","SYMC","TXN","TSLA","VRSK","VRTX","VIAB","VOD","WDC","WFM","WYNN","XLNX","YHOO"};
+	
 	private ArrayAdapter<CharSequence> adapter, adapter2;
 
 	private static final int ADD_SHARE = 10;
@@ -54,9 +60,7 @@ public class SimplePieChartActivity extends Activity {
 	private int numSharesSelected;
 	private String companyNameSelected;
 	private String[] myCompanyShares;
-	
-	
-	
+		
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -161,18 +165,53 @@ public class SimplePieChartActivity extends Activity {
 			ntBuilder = new AlertDialog.Builder(this);
 			ntBuilder.setTitle(R.string.title_remove_share);
 			final View layoutView2 = ntInflater.inflate(R.layout.remove_share_dialog, null);
-			//final NumberPicker np_rem = (NumberPicker) layoutView2.findViewById(R.id.numberPicker_remove_share);
-			//final Spinner spinner_rem = (Spinner) layoutView2.findViewById(R.id.spinner_companys_ticks);
-			//spinner_rem.setAdapter(adapter2);
-			//AutoCompleteTextView textView2 = (AutoCompleteTextView) layoutView2.findViewById(R.id.autoCompleteTextView1);
-	        //textView2.setAdapter(adapter2);
-	        
+			final NumberPicker np_rem = (NumberPicker) layoutView2.findViewById(R.id.numberPicker_remove_share);
+			final Spinner spinner_rem = (Spinner) layoutView2.findViewById(R.id.spinner_rem_companys_ticks);
+			spinner_rem.setAdapter(adapter2);
+			AutoCompleteTextView textView2 = (AutoCompleteTextView) layoutView2.findViewById(R.id.autoCompleteTextView1);
+	        textView2.setAdapter(adapter2);
+	        spinner_rem.setOnItemSelectedListener(new OnItemSelectedListener() {
+				@Override
+				public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+			        companyNameSelected = (String) spinner_rem.getSelectedItem();
+			        for(int i = 0; i < quotes.size(); i++){
+			        	if(quotes.get(i).getCompanyName().equals(companyNameSelected)){
+			        		np_rem.setMaxValue(quotes.get(i).getShareNumber());
+			        		np_rem.setMinValue(1);
+			        	}
+			        }					
+				}
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) {
+				}
+			});
 			ntBuilder.setView(layoutView2);
 			ntBuilder.setPositiveButton(R.string.positive_remove_button_label,
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int id) {
-							//TODO:
+							numSharesSelected = np_rem.getValue();
+							System.out.println(numSharesSelected);
+							ArrayList<SimpleQuoteDB> quotes_aux = new ArrayList<SimpleQuoteDB>();
+							for(int i = 0; i < quotes.size(); i++){
+								if(quotes.get(i).getCompanyName().equals(companyNameSelected)){
+									//TODO: Update the database...
+									int numberShares = quotes.get(i).getShareNumber() - numSharesSelected;
+									double currentvalue = quotes.get(i).getCurrentValue();
+									if(numberShares > 0) quotes_aux.add(new SimpleQuoteDB(companyNameSelected, numberShares, currentvalue));
+								}
+								else
+									quotes_aux.add(quotes.get(i));
+							}
+							Toast.makeText(getApplicationContext(), "" 
+									+ numSharesSelected
+									+ " shares of the "
+									+ companyNameSelected
+									+ " company removed successfully!", Toast.LENGTH_LONG)
+							.show();
+							bundle.putSerializable("quotes", quotes_aux);
+							newIntent.putExtras(bundle);
+							startActivity(newIntent);
 						}
 					});
 			ntBuilder.setNegativeButton(R.string.negative_button_label,new DialogInterface.OnClickListener() {
