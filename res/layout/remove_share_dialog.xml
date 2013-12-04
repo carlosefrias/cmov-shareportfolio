@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout1"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <Spinner
-        android:id="@+id/spinner_companys_ticks"
+        android:id="@+id/spinner_rem_companys_ticks"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
 
     <NumberPicker
         android:id="@+id/numberPicker_remove_share"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_below="@+id/autoCompleteTextView1"
+        android:layout_centerHorizontal="true"
         android:gravity="center_horizontal" />
 
-</LinearLayout>
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinner_rem_companys_ticks"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="@string/hint_type_share_company" >
+
+        <requestFocus />
+    </AutoCompleteTextView>
+
+</RelativeLayout>

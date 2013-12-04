@@ -43,22 +43,24 @@ public final class R {
         public static final int RelativeLayout1=0x7f09000a;
         public static final int SelectThePeriodicityLabel=0x7f090006;
         public static final int SelectTheTickNameLabel=0x7f090004;
-        public static final int action_settings=0x7f090014;
+        public static final int action_settings=0x7f090016;
+        public static final int autoCompleteTextView1=0x7f090014;
         public static final int datePicker=0x7f090008;
         public static final int donutSizeSeekBar=0x7f090010;
         public static final int donutSizeSeekLabel=0x7f09000f;
         public static final int donutSizeTextView=0x7f090011;
         public static final int mySimplePieChart=0x7f09000e;
-        public static final int mySimpleXYPlot=0x7f090013;
+        public static final int mySimpleXYPlot=0x7f090015;
         public static final int my_shares_button=0x7f090001;
-        public static final int new_share_dialog=0x7f090015;
-        public static final int numberPicker_remove_share=0x7f090012;
+        public static final int new_share_dialog=0x7f090017;
+        public static final int numberPicker_remove_share=0x7f090013;
         public static final int number_picker=0x7f09000d;
-        public static final int remove_share_dialog=0x7f090016;
+        public static final int remove_share_dialog=0x7f090018;
         public static final int search_button=0x7f090002;
         public static final int share_edit_text=0x7f09000c;
         public static final int shares_evolution=0x7f090003;
         public static final int spinner_companys_ticks=0x7f09000b;
+        public static final int spinner_rem_companys_ticks=0x7f090012;
         public static final int tickNameSpinner=0x7f090005;
     }
     public static final class layout {

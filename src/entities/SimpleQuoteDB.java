@@ -2,15 +2,13 @@ package entities;
 
 import java.io.Serializable;
 
-
-
-public class SimpleQuoteDB implements Serializable{
+public class SimpleQuoteDB implements Serializable {
 	private static final long serialVersionUID = -4179572179131849053L;
 	private String companyName;
 	private int shareNumber;
 	private double currentValue;
-	
-	public SimpleQuoteDB(String cn, int sn, double cv){
+
+	public SimpleQuoteDB(String cn, int sn, double cv) {
 		this.setCompanyName(cn);
 		this.setShareNumber(sn);
 		this.setCurrentValue(cv);
@@ -38,6 +36,12 @@ public class SimpleQuoteDB implements Serializable{
 
 	public void setCurrentValue(double currentValue) {
 		this.currentValue = currentValue;
+	}
+
+	@Override
+	public String toString() {
+		return "" + this.companyName + ": " + this.currentValue + ": "
+				+ this.shareNumber;
 	}
 
 }

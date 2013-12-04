@@ -15,26 +15,13 @@ import android.annotation.SuppressLint;
 import entities.Quote;
 
 public class RestApi {
-	//private static String urlTest = "http://ichart.finance.yahoo.com/table.txt?a=9&b=5&c=2013&d=9&e=19&f=2013&g=d&s=GOOG";
 	private static String urlQuoteVariation = "http://ichart.finance.yahoo.com/table.txt?";
-	//private static String urlTest = "http://finance.yahoo.com/d/quotes?f=sl1d1t1v&s=DELL";
-	//"http://finance.yahoo.com/d/quotes?f=sl1d1t1v&s=DELL";
-	//"http://ichart.finance.yahoo.com/table.txt?a=9&b=5&c=2013&d=9&e=19&f=2013&g=d&s=DELL"
+	private static String urlQuoteCurrentValue = "http://finance.yahoo.com/d/quotes?f=sl1d1t1v&s=";
 
 	@SuppressLint("SimpleDateFormat")
 	public static void main(String args[]){
-		//Date date1 = null, date2 = null;
-		try {
-			DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-			Date date1 = df.parse("2013/10/16");
-			Date date2 = new Date();
-			System.out.println(date1);
-			System.out.println(date2);
-			System.out.println(getQuotesHistory("GOOG", date1, date2, 'w'));
-
-		} catch (java.text.ParseException e) {
-			e.printStackTrace();
-		}
+		String[] array = {"DELL","GOOG","AAPL"};
+		System.out.println(getCurrentValue(array));
 	}
 	/**
 	 * Function that returns the response form server
@@ -83,7 +70,7 @@ public class RestApi {
 	 * @return
 	 */
 	@SuppressWarnings("deprecation")
-	private static String constructURL(String tickName, Date prevDate, Date postDate, char periodicity){
+	private static String constructURLVariation(String tickName, Date prevDate, Date postDate, char periodicity){
 		String url = urlQuoteVariation;
 		/*
 		 a – initial month (0 denotes January, and so on) 
@@ -112,7 +99,7 @@ public class RestApi {
 	 * @return
 	 */
 	public static ArrayList<Quote> getQuotesHistory(String tickName, Date prevDate, Date postDate, char periodicity){
-		String string = getResponse(constructURL(tickName, prevDate, postDate, periodicity));
+		String string = getResponse(constructURLVariation(tickName, prevDate, postDate, periodicity));
 		ArrayList<Quote> array = new ArrayList<Quote>();
 		Quote quote;
 		String[] arrayString = string.split("\n");
@@ -130,4 +117,32 @@ public class RestApi {
 		}
 		return array;
 	}
+	/**
+	 * 
+	 * @param tickNames
+	 * @return
+	 */
+	public static ArrayList<Quote> getCurrentValue(String[] tickNames){
+		String url = urlQuoteCurrentValue;
+		for(int i = 0; i < tickNames.length; i++){
+			url += tickNames[i] + ",";
+		}
+		url = url.substring(0, url.length()-1);
+		
+		String response = getResponse(url);
+		ArrayList<Quote> array = new ArrayList<Quote>();
+		String[] arrayString = response.split("\n");
+		for(int i = 0; i < arrayString.length; i++){
+			String[] quoteString = arrayString[i].split(",");
+			Quote quote = new Quote();
+			quote.setCompanyName(quoteString[0]);
+			quote.setCloseValue(Double.parseDouble(quoteString[1]));
+			quote.setDate(quoteString[2]);
+			quote.setTime(quoteString[3]);
+			quote.setVolume(Long.parseLong(quoteString[4]));
+			array.add(quote);
+		}
+		return array;
+	}
 }
+
