@@ -29,15 +29,18 @@ public class ShareDatabase extends SQLiteOpenHelper{
 	public void addShare(int shareNumber, String companyName){
 		SQLiteDatabase db = getWritableDatabase();
 		ContentValues content = new ContentValues();
-		/*for(int i = 0; i < nTickets; i++){
-			content.put("idticket", uuids[i]);
-			content.put("type", types[i]);
-			content.put("ischecked", 0);
-			content.put("isvalidated", 0);
-			content.put("timeofvalidation", "");
-			content.put("idbus", "");
-			db.insert("Ticket", null, content);
-		}*/
+		content.put("companyID", companyName);
+		content.put("shareNumber", shareNumber);
+		db.insert("Stock", null, content);
+	}
+	
+	public void deleteShare(String companyName){
+		SQLiteDatabase db = getWritableDatabase();
+		db.execSQL("DELETE from Stock WHERE companyID=" + companyName);
 	}
 
+	public void updateShare(int newShareNumber, String companyName){
+		SQLiteDatabase db = getWritableDatabase();
+		db.execSQL("UPDATE Stock SET shareNumber=" + Integer.toString(newShareNumber) + "WHERE companyID=" + companyName);
+	}
 }
