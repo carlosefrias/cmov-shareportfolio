@@ -2,6 +2,9 @@ package com.feup.cmov.shareportfolio;
 
 import java.util.ArrayList;
 
+import database.SimpleQuoteDB;
+import database.StockDataSource;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,17 +15,15 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import entities.Quote;
-import entities.SimpleQuoteDB;
 
 public class MainActivity extends Activity implements OnClickListener{
 	
 	private Button mySharesButton, searchButton, shareEvolutionButton;
 	private Intent newIntent;
 	private Bundle bundle;
-	private ArrayList<SimpleQuoteDB> myQuotes;
-	//FOR NOW
-	int[] array = {12, 8, 4, 15, 5};
-	String[] ticks = {"GOOG", "IBM", "DELL", "AMZN", "AAPL"};
+	private String username = "teste3";
+	private ArrayList<SimpleQuoteDB> quotes;
+	private StockDataSource datasource;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		searchButton = (Button) findViewById(R.id.search_button);
 		shareEvolutionButton = (Button) findViewById(R.id.shares_evolution);
 		
-		myQuotes = new ArrayList<SimpleQuoteDB>();
+		//myQuotes = new ArrayList<SimpleQuoteDB>();
 		newIntent = new Intent(this.getApplicationContext(), SimplePieChartActivity.class);
 		bundle = new Bundle();
 		
@@ -54,28 +55,32 @@ public class MainActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		class LoadCurrentValues implements Runnable{
-			String[] companyNames;
-			public LoadCurrentValues(String[] cnames){
-				this.companyNames = cnames;
+			ArrayList<SimpleQuoteDB> quotes;
+			public LoadCurrentValues(ArrayList<SimpleQuoteDB> quotes){
+				this.quotes = quotes;
 			}
 			@Override
 			public void run() {
+				String[] companyNames = new String[quotes.size()];
+				for(int i = 0; i < quotes.size(); i++){
+					companyNames[i] = quotes.get(i).getCompanyName();
+				}
 				final ArrayList<Quote> quoteValues = RestApi.getCurrentValue(companyNames);
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						if(!quoteValues.isEmpty()){
 							Toast.makeText(getApplicationContext(), "Share current values loaded successfully", Toast.LENGTH_LONG).show();
-							for(int i = 0; i < array.length; i++){
-								SimpleQuoteDB quote = new SimpleQuoteDB(ticks[i], array[i], quoteValues.get(i).getCloseValue());
-								myQuotes.add(quote);
+							for(int i = 0; i < quotes.size(); i++){
+								SimpleQuoteDB sq = new SimpleQuoteDB(quotes.get(i).getCompanyName(),quotes.get(i).getShareNumber(), quoteValues.get(i).getCloseValue());
+								datasource.updateShare(sq, username);
 							}
-							bundle.putSerializable("quotes", myQuotes);
 							newIntent.putExtras(bundle);
 							startActivity(newIntent);	
 							
 						}else{
 							Toast.makeText(getApplicationContext(), "Unable to load current values", Toast.LENGTH_LONG).show();
+							startActivity(newIntent);
 						}
 					}
 				});
@@ -86,10 +91,11 @@ public class MainActivity extends Activity implements OnClickListener{
 			startActivity(newIntent);
 		}
 		else if(v.getId()== mySharesButton.getId()){
-			ArrayList<SimpleQuoteDB> quotes = new ArrayList<SimpleQuoteDB>();
-			//TODO: Load quotes from database
-			//Loading current value from webservice
-			new Thread(new LoadCurrentValues(ticks)).start();		
+			datasource = new StockDataSource(this);
+		    datasource.open();
+			quotes = datasource.getAllShares(username);
+			System.out.println("*******"+quotes.size());
+			new Thread(new LoadCurrentValues(quotes)).start();		
 		}
 		else if(v.getId() == searchButton.getId()){
 			

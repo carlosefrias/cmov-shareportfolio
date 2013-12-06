@@ -32,10 +32,12 @@ import com.androidplot.pie.PieRenderer;
 import com.androidplot.pie.Segment;
 import com.androidplot.pie.SegmentFormatter;
 
+import database.SimpleQuoteDB;
+import database.StockDataSource;
 import entities.Quote;
-import entities.SimpleQuoteDB;
 
 public class SimplePieChartActivity extends Activity {
+	private String username = "teste3";
 	private TextView donutSizeTextView;
 	private SeekBar donutSizeSeekBar;
 	private PieChart pie;
@@ -44,7 +46,7 @@ public class SimplePieChartActivity extends Activity {
 
 	private ArrayList<Segment> sectors;
 	private ArrayList<SimpleQuoteDB> quotes;
-	//TODO: Put here all company names...
+	
 	private final static String[] companyNames = new String [] {"FOXA","ATVI","ADBE","AKAM","ALXN","ALTR","AMZN","MGN","ADI","AAPL",
 		"AMAT","ADSK","ADP","AVGO","BIDU","BBBY","BIIB","BRCM","CHRW","CA","CTRX","CELG","CERN","CHTR","CHKP","CSCO","CTXS","CTSH",
 		"CMCSA","COST","DELL","XRAY","DTV","DISCA","DLTR","EBAY","EQIX","EXPE","EXPD","ESRX","FFIV","FB","FAST","FISV","FOSL","GRMN",
@@ -60,7 +62,10 @@ public class SimplePieChartActivity extends Activity {
 	private int numSharesSelected;
 	private String companyNameSelected;
 	private String[] myCompanyShares;
-		
+	
+	// Database fields
+	private StockDataSource datasource;
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -113,15 +118,13 @@ public class SimplePieChartActivity extends Activity {
 								@Override
 								public void run() {
 									final ArrayList<Quote> quote = RestApi.getCurrentValue(new String[] {companyName});
-									//TODO: add the shares to the database
 									runOnUiThread(new Runnable() {
 										@Override
 										public void run() {
 											if(!quote.isEmpty()){
 												Quote q = quote.get(0);
 												SimpleQuoteDB sq = new SimpleQuoteDB(companyName, shareNumber, q.getCloseValue());
-												quotes = addNewQuote(quotes, sq);
-												//TODO:ADD TO DATABASE
+												addNewQuote(quotes, sq);
 												Toast.makeText(getApplicationContext(), "" 
 														+ shareNumber
 														+ " shares of the "
@@ -133,18 +136,17 @@ public class SimplePieChartActivity extends Activity {
 												startActivity(newIntent);
 											}
 										}
-										private ArrayList<SimpleQuoteDB> addNewQuote(ArrayList<SimpleQuoteDB> quotes, SimpleQuoteDB sq) {
+										private void addNewQuote(ArrayList<SimpleQuoteDB> quotes, SimpleQuoteDB sq) {
 											boolean exists = false;
 											for(int i = 0; i < quotes.size(); i++){
 												if(quotes.get(i).getCompanyName().equals(sq.getCompanyName())){
 													exists = true;
-													int numberShares = sq.getShareNumber() + quotes.get(i).getShareNumber();
-													quotes.get(i).setShareNumber(numberShares);
+													sq.setShareNumber(sq.getShareNumber() + quotes.get(i).getShareNumber());
+													datasource.updateShare(sq, username);
 													break;
 												}
 											}
-											if(!exists) quotes.add(sq);
-											return quotes;
+											if(!exists) datasource.createShare(sq, username);
 										}
 									});
 								}
@@ -191,17 +193,18 @@ public class SimplePieChartActivity extends Activity {
 						@Override
 						public void onClick(DialogInterface dialog, int id) {
 							numSharesSelected = np_rem.getValue();
-							System.out.println(numSharesSelected);
-							ArrayList<SimpleQuoteDB> quotes_aux = new ArrayList<SimpleQuoteDB>();
 							for(int i = 0; i < quotes.size(); i++){
 								if(quotes.get(i).getCompanyName().equals(companyNameSelected)){
 									//TODO: Update the database...
 									int numberShares = quotes.get(i).getShareNumber() - numSharesSelected;
 									double currentvalue = quotes.get(i).getCurrentValue();
-									if(numberShares > 0) quotes_aux.add(new SimpleQuoteDB(companyNameSelected, numberShares, currentvalue));
+									if(numberShares > 0) {
+										SimpleQuoteDB sq1 = new SimpleQuoteDB(companyNameSelected, numberShares, currentvalue);
+										datasource.updateShare(sq1, username);
+									}else{
+										datasource.deleteShare(companyNameSelected, username);
+									}
 								}
-								else
-									quotes_aux.add(quotes.get(i));
 							}
 							Toast.makeText(getApplicationContext(), "" 
 									+ numSharesSelected
@@ -209,7 +212,6 @@ public class SimplePieChartActivity extends Activity {
 									+ companyNameSelected
 									+ " company removed successfully!", Toast.LENGTH_LONG)
 							.show();
-							bundle.putSerializable("quotes", quotes_aux);
 							newIntent.putExtras(bundle);
 							startActivity(newIntent);
 						}
@@ -239,15 +241,17 @@ public class SimplePieChartActivity extends Activity {
 		
 		// initialize our XYPlot reference:
 		pie = (PieChart) findViewById(R.id.mySimplePieChart);
-		donutSizeSeekBar = (SeekBar) findViewById(R.id.donutSizeSeekBar);
+		donutSizeSeekBar = (SeekBar) findViewById(R.id.donutSizeSeekBar);	
+
+		datasource = new StockDataSource(this);
+	    datasource.open();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onStart(){
 		super.onStart();
-		quotes = (ArrayList<SimpleQuoteDB>) bundle.getSerializable("quotes");
-		
+		quotes = new ArrayList<SimpleQuoteDB>();
+		quotes = datasource.getAllShares(username);
 		myCompanyShares = new String[quotes.size()];
 		//Get the company Names
 		for(int i = 0; i < quotes.size(); i++)

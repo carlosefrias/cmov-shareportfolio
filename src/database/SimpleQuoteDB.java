@@ -1,4 +1,4 @@
-package entities;
+package database;
 
 import java.io.Serializable;
 
@@ -7,7 +7,12 @@ public class SimpleQuoteDB implements Serializable {
 	private String companyName;
 	private int shareNumber;
 	private double currentValue;
-
+	
+	public SimpleQuoteDB(){
+		this.companyName = null;
+		this.shareNumber = 0;
+		this.currentValue = 0.0;
+	}
 	public SimpleQuoteDB(String cn, int sn, double cv) {
 		this.setCompanyName(cn);
 		this.setShareNumber(sn);
