@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -20,8 +18,10 @@ public class RestApi {
 
 	@SuppressLint("SimpleDateFormat")
 	public static void main(String args[]){
-		String[] array = {"DELL","GOOG","AAPL"};
+		String[] array = {};
 		System.out.println(getCurrentValue(array));
+		
+		
 	}
 	/**
 	 * Function that returns the response form server
@@ -131,6 +131,7 @@ public class RestApi {
 		
 		String response = getResponse(url);
 		ArrayList<Quote> array = new ArrayList<Quote>();
+		if(tickNames.length == 0) return array;
 		String[] arrayString = response.split("\n");
 		for(int i = 0; i < arrayString.length; i++){
 			String[] quoteString = arrayString[i].split(",");
@@ -139,7 +140,11 @@ public class RestApi {
 			quote.setCloseValue(Double.parseDouble(quoteString[1]));
 			quote.setDate(quoteString[2]);
 			quote.setTime(quoteString[3]);
-			quote.setVolume(Long.parseLong(quoteString[4]));
+			try{
+				quote.setVolume(Long.parseLong(quoteString[4]));
+			}catch(NumberFormatException e){
+				
+			}
 			array.add(quote);
 		}
 		return array;

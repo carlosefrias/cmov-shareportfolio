@@ -37,12 +37,13 @@ import database.StockDataSource;
 import entities.Quote;
 
 public class SimplePieChartActivity extends Activity {
-	private String username = "teste3";
+	private String username;
 	private TextView donutSizeTextView;
 	private SeekBar donutSizeSeekBar;
 	private PieChart pie;
 	private Bundle bundle;
 	private Intent newIntent;
+	private DecimalFormat df;
 
 	private ArrayList<Segment> sectors;
 	private ArrayList<SimpleQuoteDB> quotes;
@@ -82,6 +83,10 @@ public class SimplePieChartActivity extends Activity {
 		case R.id.remove_share_dialog:
 			showDialog(REMOVE_SHARE);
 			return true;
+		case R.id.sign_out_action:
+			Intent validationIntent = new Intent(getApplicationContext(), MainActivity.class);
+			startActivity(validationIntent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -98,6 +103,39 @@ public class SimplePieChartActivity extends Activity {
 			final View layoutView = ntInflater.inflate(R.layout.add_share_dialog, null);
 			final NumberPicker np = (NumberPicker) layoutView.findViewById(R.id.number_picker);
 			final Spinner spinner = (Spinner) layoutView.findViewById(R.id.spinner_companys_ticks);
+			final TextView info_text = (TextView) layoutView.findViewById(R.id.share_info_text);
+			spinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+				@Override
+				public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+					class GetShareInfo implements Runnable{
+						private String cn;
+						public GetShareInfo(String cn){
+							this.cn = cn;
+						}
+						@Override
+						public void run() {
+							final ArrayList<Quote> qts = RestApi.getCurrentValue(new String[] {cn});
+							if(!qts.isEmpty()){
+								final Quote quote_aux = qts.get(0);
+								runOnUiThread(new Runnable(){
+									@Override
+									public void run() {
+										info_text.setText(quote_aux.toStringDisplay() 
+												+ "\nPurchase value: " 
+												+ df.format(np.getValue() * quote_aux.getCloseValue())
+												+ " $");
+									}				
+								});
+							}
+						}
+					}
+					if(arg0.getId() == spinner.getId()){
+						new Thread(new GetShareInfo((String)spinner.getSelectedItem())).start();
+					}
+				}
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) {
+				}});
 			spinner.setAdapter(adapter);
 			AutoCompleteTextView textView = (AutoCompleteTextView) layoutView.findViewById(R.id.share_edit_text);
 	        textView.setAdapter(adapter);
@@ -131,7 +169,7 @@ public class SimplePieChartActivity extends Activity {
 														+ companyName
 														+ " company added successfully!", Toast.LENGTH_LONG)
 												.show();
-												bundle.putSerializable("quotes", quotes);
+												bundle.putSerializable("username", username);
 												newIntent.putExtras(bundle);
 												startActivity(newIntent);
 											}
@@ -169,6 +207,7 @@ public class SimplePieChartActivity extends Activity {
 			final View layoutView2 = ntInflater.inflate(R.layout.remove_share_dialog, null);
 			final NumberPicker np_rem = (NumberPicker) layoutView2.findViewById(R.id.numberPicker_remove_share);
 			final Spinner spinner_rem = (Spinner) layoutView2.findViewById(R.id.spinner_rem_companys_ticks);
+			final TextView info_rem = (TextView) layoutView2.findViewById(R.id.info_rem_share);
 			spinner_rem.setAdapter(adapter2);
 			AutoCompleteTextView textView2 = (AutoCompleteTextView) layoutView2.findViewById(R.id.autoCompleteTextView1);
 	        textView2.setAdapter(adapter2);
@@ -178,8 +217,11 @@ public class SimplePieChartActivity extends Activity {
 			        companyNameSelected = (String) spinner_rem.getSelectedItem();
 			        for(int i = 0; i < quotes.size(); i++){
 			        	if(quotes.get(i).getCompanyName().equals(companyNameSelected)){
+			        		SimpleQuoteDB sp = quotes.get(i);
 			        		np_rem.setMaxValue(quotes.get(i).getShareNumber());
 			        		np_rem.setMinValue(1);
+			        		info_rem.setText(sp.toStringDisplay() + "\nSale value: " + df.format(np_rem.getValue() * sp.getCurrentValue()) + "$");
+			        		break;
 			        	}
 			        }					
 				}
@@ -195,7 +237,6 @@ public class SimplePieChartActivity extends Activity {
 							numSharesSelected = np_rem.getValue();
 							for(int i = 0; i < quotes.size(); i++){
 								if(quotes.get(i).getCompanyName().equals(companyNameSelected)){
-									//TODO: Update the database...
 									int numberShares = quotes.get(i).getShareNumber() - numSharesSelected;
 									double currentvalue = quotes.get(i).getCurrentValue();
 									if(numberShares > 0) {
@@ -212,6 +253,7 @@ public class SimplePieChartActivity extends Activity {
 									+ companyNameSelected
 									+ " company removed successfully!", Toast.LENGTH_LONG)
 							.show();
+							bundle.putSerializable("username", username);
 							newIntent.putExtras(bundle);
 							startActivity(newIntent);
 						}
@@ -235,6 +277,8 @@ public class SimplePieChartActivity extends Activity {
 		
 		// loading extras from the previous activity
 		bundle = this.getIntent().getExtras();
+		username = (String) bundle.get("username");
+		
 		newIntent = new Intent(this.getApplicationContext(), SimplePieChartActivity.class);
 		//Loading the items for the Spinner
 		adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, companyNames);
@@ -282,7 +326,7 @@ public class SimplePieChartActivity extends Activity {
 		updateDonutText();
 		sectors = new ArrayList<Segment>();
 		EmbossMaskFilter emf = new EmbossMaskFilter(new float[] { 1, 1, 1 }, 0.4f, 10, 8.2f);
-		DecimalFormat df = new DecimalFormat("#.##");
+		df = new DecimalFormat("#.##");
 		Segment s;
 		for(int i = 0; i < quotes.size(); i++){
 			String name = quotes.get(i).getCompanyName();

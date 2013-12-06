@@ -4,13 +4,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class ShareDatabaseHelper extends SQLiteOpenHelper{
+public class ShareDBHelper extends SQLiteOpenHelper{
 	public static String TABLE_STOCK = "Stock";
 	public static String TABLE_USER = "User";
 	public static String[] stock_table_fields = new String[]{"companyID", "shareNumber", "username", "correntValue"};
 	public static String[] user_table_fields = new String[]{"username", "password"};
 	
-	public ShareDatabaseHelper(Context context) {
+	public ShareDBHelper(Context context) {
 		super(context, "Shares.db", null, 1);
 	}
 	@Override

@@ -48,5 +48,10 @@ public class SimpleQuoteDB implements Serializable {
 		return "" + this.companyName + ": " + this.currentValue + ": "
 				+ this.shareNumber;
 	}
+	public String toStringDisplay() {
+		return "Company: " + 
+				this.companyName + 
+				"\nValue per share: " + this.currentValue + " $";
+	}
 
 }

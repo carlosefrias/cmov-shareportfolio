@@ -18,16 +18,21 @@
     <string name="add_share">Add Share</string>
     <string name="remove_share">Remove Share</string>
     <string name="title_add_share">Add Share Dialog</string>
+    <string name="title_sign_out">Sign out</string>
     <string name="title_remove_share">Delete Share Dialog</string>
     <string name="positive_add_button_label">Add</string>
     <string name="positive_remove_button_label">Remove</string>
     <string name="negative_button_label">Cancel</string>
     <string name="hint_type_share_company">Write the company tick name</string>
+    <string name="share_add_info">Info about the share</string>
     <!-- END Dialogs -->
 
 
     <!-- MainActivity strings -->
-    <string name="my_shares_string">My share portfolio</string>
+    <string name="my_shares_string_sign_in">Sign In</string>
+    <string name="my_shares_string_sign_up">Sign Up</string>
+    <string name="username_txt">Username</string>
+    <string name="password_txt">password</string>
     <string name="search_shares_string">Consult stock values</string>
     <string name="share_evolution">Consult stock evolution</string>
     <!-- End MainActivity -->

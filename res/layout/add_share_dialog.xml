@@ -28,8 +28,19 @@
         android:id="@+id/number_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/share_edit_text"
-        android:layout_centerHorizontal="true"
         android:width="100dip" />
+
+    <TextView
+        android:id="@+id/share_info_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/number_picker"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/number_picker"
+        android:layout_toLeftOf="@+id/number_picker"
+        android:text="@string/share_add_info"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

@@ -104,5 +104,11 @@ public class Quote implements Serializable{
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+	public String toStringDisplay(){
+		return "Company: " + getCompanyName()+
+				"\nDate: " + this.date +  
+				"\nValue per share: " + this.closeValue +  
+				" $\nVolume: " + this.volume ;
+	}
 	
 }
