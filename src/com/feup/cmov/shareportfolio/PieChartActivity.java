@@ -36,7 +36,7 @@ import database.SimpleQuoteDB;
 import database.StockDataSource;
 import entities.Quote;
 
-public class SimplePieChartActivity extends Activity {
+public class PieChartActivity extends Activity {
 	private String username;
 	private TextView donutSizeTextView;
 	private SeekBar donutSizeSeekBar;
@@ -48,7 +48,7 @@ public class SimplePieChartActivity extends Activity {
 	private ArrayList<Segment> sectors;
 	private ArrayList<SimpleQuoteDB> quotes;
 	
-	private final static String[] companyNames = new String [] {"FOXA","ATVI","ADBE","AKAM","ALXN","ALTR","AMZN","MGN","ADI","AAPL",
+	public final static String[] COMPANY_NAMES = new String [] {"FOXA","ATVI","ADBE","AKAM","ALXN","ALTR","AMZN","MGN","ADI","AAPL",
 		"AMAT","ADSK","ADP","AVGO","BIDU","BBBY","BIIB","BRCM","CHRW","CA","CTRX","CELG","CERN","CHTR","CHKP","CSCO","CTXS","CTSH",
 		"CMCSA","COST","DELL","XRAY","DTV","DISCA","DLTR","EBAY","EQIX","EXPE","EXPD","ESRX","FFIV","FB","FAST","FISV","FOSL","GRMN",
 		"GILD","GOOG","GMCR","HSIC","INTC","INTU","ISRG","KLAC","KRFT","LBTYA","LINTA","LMCA","LLTC","MAT","MXIM","MCHP","MU","MSFT",
@@ -61,7 +61,7 @@ public class SimplePieChartActivity extends Activity {
 	private static final int REMOVE_SHARE = 20;
 	
 	private int numSharesSelected;
-	private String companyNameSelected;
+	private String COMPANY_NAMESelected;
 	private String[] myCompanyShares;
 	
 	// Database fields
@@ -189,9 +189,9 @@ public class SimplePieChartActivity extends Activity {
 									});
 								}
 							}
-							companyNameSelected = (String) spinner.getSelectedItem();
+							COMPANY_NAMESelected = (String) spinner.getSelectedItem();
 							numSharesSelected = np.getValue();
-							new Thread(new AddShare(companyNameSelected, numSharesSelected)).start();
+							new Thread(new AddShare(COMPANY_NAMESelected, numSharesSelected)).start();
 						}
 					});
 			ntBuilder.setNegativeButton(R.string.negative_button_label,new DialogInterface.OnClickListener() {
@@ -214,9 +214,9 @@ public class SimplePieChartActivity extends Activity {
 	        spinner_rem.setOnItemSelectedListener(new OnItemSelectedListener() {
 				@Override
 				public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-			        companyNameSelected = (String) spinner_rem.getSelectedItem();
+			        COMPANY_NAMESelected = (String) spinner_rem.getSelectedItem();
 			        for(int i = 0; i < quotes.size(); i++){
-			        	if(quotes.get(i).getCompanyName().equals(companyNameSelected)){
+			        	if(quotes.get(i).getCompanyName().equals(COMPANY_NAMESelected)){
 			        		SimpleQuoteDB sp = quotes.get(i);
 			        		np_rem.setMaxValue(quotes.get(i).getShareNumber());
 			        		np_rem.setMinValue(1);
@@ -236,21 +236,21 @@ public class SimplePieChartActivity extends Activity {
 						public void onClick(DialogInterface dialog, int id) {
 							numSharesSelected = np_rem.getValue();
 							for(int i = 0; i < quotes.size(); i++){
-								if(quotes.get(i).getCompanyName().equals(companyNameSelected)){
+								if(quotes.get(i).getCompanyName().equals(COMPANY_NAMESelected)){
 									int numberShares = quotes.get(i).getShareNumber() - numSharesSelected;
 									double currentvalue = quotes.get(i).getCurrentValue();
 									if(numberShares > 0) {
-										SimpleQuoteDB sq1 = new SimpleQuoteDB(companyNameSelected, numberShares, currentvalue);
+										SimpleQuoteDB sq1 = new SimpleQuoteDB(COMPANY_NAMESelected, numberShares, currentvalue);
 										datasource.updateShare(sq1, username);
 									}else{
-										datasource.deleteShare(companyNameSelected, username);
+										datasource.deleteShare(COMPANY_NAMESelected, username);
 									}
 								}
 							}
 							Toast.makeText(getApplicationContext(), "" 
 									+ numSharesSelected
 									+ " shares of the "
-									+ companyNameSelected
+									+ COMPANY_NAMESelected
 									+ " company removed successfully!", Toast.LENGTH_LONG)
 							.show();
 							bundle.putSerializable("username", username);
@@ -279,9 +279,9 @@ public class SimplePieChartActivity extends Activity {
 		bundle = this.getIntent().getExtras();
 		username = (String) bundle.get("username");
 		
-		newIntent = new Intent(this.getApplicationContext(), SimplePieChartActivity.class);
+		newIntent = new Intent(this.getApplicationContext(), PieChartActivity.class);
 		//Loading the items for the Spinner
-		adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, companyNames);
+		adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, COMPANY_NAMES);
 		
 		// initialize our XYPlot reference:
 		pie = (PieChart) findViewById(R.id.mySimplePieChart);

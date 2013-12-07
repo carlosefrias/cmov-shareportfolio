@@ -40,7 +40,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		usernameEditText = (EditText) findViewById(R.id.username_txt);
 		passwordEditText = (EditText) findViewById(R.id.passord_txt);
 		
-		newIntent = new Intent(this.getApplicationContext(), SimplePieChartActivity.class);
+		newIntent = new Intent(this.getApplicationContext(), PieChartActivity.class);
 		bundle = new Bundle();
 		
 		
@@ -95,6 +95,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		}
 		if(v.getId() == shareEvolutionButton.getId()){
 			Intent newIntent = new Intent(this.getApplicationContext(), SelectQuotesEvolution.class);
+			bundle.putSerializable("username", username);
+			newIntent.putExtras(bundle);
 			startActivity(newIntent);
 		}
 		else if(v.getId()== signInButton.getId()){

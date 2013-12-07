@@ -10,22 +10,19 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.NumberPicker;
-import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.Spinner;
 import android.widget.Toast;
 import entities.Quote;
 
-public class SelectQuotesEvolution extends Activity implements OnValueChangeListener{
+public class SelectQuotesEvolution extends Activity{
 	public static final int ADD_SHARE = 10;
 	public static final int REMOVE_SHARE = 20;
 	
@@ -42,13 +39,6 @@ public class SelectQuotesEvolution extends Activity implements OnValueChangeList
 	private Bundle bundle;
 	private Intent newIntent;
 	
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.select_quotes_evolution, menu);
-		return true;
-	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,24 +50,26 @@ public class SelectQuotesEvolution extends Activity implements OnValueChangeList
 		button = (Button) findViewById(R.id.ButtonSeeEvolution);
 		
 		//Loading the items for the Spinner
-		tickNames = new String [] {"IBM", "MSFT", "DELL", "CSCO", "AMZN", "HPQ", "GOOG", "AAPL", "ORCL"};
+		tickNames = PieChartActivity.COMPANY_NAMES;
 		periodicityNames = new String [] {"Daily", "Weekly", "Monthly"};
 		periodicityChars = new char []{'d', 'w', 'm'};
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, tickNames);
         tickSpinner.setAdapter(adapter);
+		AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.text_view_auto_complete);
+        textView.setAdapter(adapter);
         ArrayAdapter<CharSequence> adapter2 = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, periodicityNames);
         periodicitySpinner.setAdapter(adapter2);
         
 
 		bundle = new Bundle();
-		newIntent = new Intent(this.getApplicationContext(), SimpleXYPlotActivity.class);
+		newIntent = new Intent(this.getApplicationContext(), XYPlotActivity.class);
         
         //Setting the listeners
         tickSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				if(arg0.getId() == tickSpinner.getId()){
-					tickSelected = tickNames[arg2];
+					tickSelected = tickSpinner.getSelectedItem().toString();
 				}
 			}
 			@Override
@@ -106,21 +98,30 @@ public class SelectQuotesEvolution extends Activity implements OnValueChangeList
 					}
 					@Override
 					public void run() {
-						final ArrayList<Quote> array = RestApi.getQuotesHistory(tickSelected, date, new Date(), periodicitySelected);
-						Log.i("DEBUG", "" + array);
-						runOnUiThread(new Runnable() {							
-							@Override
-							public void run() {
-								if(array != null){
-									Toast.makeText(getApplicationContext(), "Share history loaded!!!", Toast.LENGTH_LONG).show();
-									//passing the busses to next activity
-									bundle.putSerializable("array", array);
-									bundle.putSerializable("tickName", tickSelected);
-									newIntent.putExtras(bundle);
-									startActivity(newIntent);
+						Date date_now = new Date();
+						final ArrayList<Quote> array = RestApi.getQuotesHistory(tickSelected, date, date_now, periodicitySelected);
+						if(date_now.getTime() > date.getTime()){
+							runOnUiThread(new Runnable() {							
+								@Override
+								public void run() {
+									if(array != null){
+										Toast.makeText(getApplicationContext(), "Share history loaded!!!", Toast.LENGTH_LONG).show();
+										bundle.putSerializable("array", array);
+										bundle.putSerializable("tickName", tickSelected);
+										bundle.putChar("type", periodicitySelected);
+										bundle.putSerializable("date", date);
+										newIntent.putExtras(bundle);
+										startActivity(newIntent);
+									}
 								}
-							}
-						});
+							});
+						}else
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									Toast.makeText(getApplicationContext(), "Select a previous date!", Toast.LENGTH_LONG).show();
+								}
+							});
 					}		
 				}
 				if(v.getId() == button.getId()){
@@ -131,8 +132,6 @@ public class SelectQuotesEvolution extends Activity implements OnValueChangeList
 						String dateString = "" + year + "/" + (month + 1) + "/" + day;
 						DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 						dateSelected = df.parse(dateString);
-						Log.i("DEBUG", "dateString: " + dateString);
-						Log.i("DEBUG", "date: " + dateSelected);
 						new Thread(new LoadShareHistory(dateSelected)).start();						
 					} catch (ParseException e) {
 						e.printStackTrace();
@@ -140,9 +139,5 @@ public class SelectQuotesEvolution extends Activity implements OnValueChangeList
 				}
 			}
 		});        
-	}
-	@Override
-	public void onValueChange(NumberPicker piker, int oldVal, int newVal) {
-		 Log.i("value is","" + newVal);		
 	}
 }

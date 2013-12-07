@@ -37,34 +37,35 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int ButtonSeeEvolution=0x7f09000c;
+        public static final int ButtonSeeEvolution=0x7f09000d;
         public static final int LinearLayout1=0x7f090000;
-        public static final int PeriodicitySpinner=0x7f09000a;
+        public static final int PeriodicitySpinner=0x7f09000b;
         public static final int RelativeLayout1=0x7f090003;
-        public static final int SelectThePeriodicityLabel=0x7f090009;
+        public static final int SelectThePeriodicityLabel=0x7f09000a;
         public static final int SelectTheTickNameLabel=0x7f090007;
-        public static final int action_settings=0x7f09001a;
-        public static final int autoCompleteTextView1=0x7f090016;
-        public static final int datePicker=0x7f09000b;
-        public static final int donutSizeSeekBar=0x7f090013;
-        public static final int donutSizeSeekLabel=0x7f090012;
-        public static final int donutSizeTextView=0x7f090014;
-        public static final int info_rem_share=0x7f090018;
-        public static final int mySimplePieChart=0x7f090011;
-        public static final int mySimpleXYPlot=0x7f090019;
-        public static final int new_share_dialog=0x7f09001b;
-        public static final int numberPicker_remove_share=0x7f090017;
-        public static final int number_picker=0x7f09000f;
+        public static final int action_settings=0x7f09001b;
+        public static final int autoCompleteTextView1=0x7f090017;
+        public static final int datePicker=0x7f09000c;
+        public static final int donutSizeSeekBar=0x7f090014;
+        public static final int donutSizeSeekLabel=0x7f090013;
+        public static final int donutSizeTextView=0x7f090015;
+        public static final int info_rem_share=0x7f090019;
+        public static final int mySimplePieChart=0x7f090012;
+        public static final int mySimpleXYPlot=0x7f09001a;
+        public static final int new_share_dialog=0x7f09001c;
+        public static final int numberPicker_remove_share=0x7f090018;
+        public static final int number_picker=0x7f090010;
         public static final int passord_txt=0x7f090002;
-        public static final int remove_share_dialog=0x7f09001c;
-        public static final int share_edit_text=0x7f09000e;
-        public static final int share_info_text=0x7f090010;
+        public static final int remove_share_dialog=0x7f09001d;
+        public static final int share_edit_text=0x7f09000f;
+        public static final int share_info_text=0x7f090011;
         public static final int shares_evolution=0x7f090006;
         public static final int sign_in=0x7f090004;
-        public static final int sign_out_action=0x7f09001d;
+        public static final int sign_out_action=0x7f09001e;
         public static final int sign_up=0x7f090005;
-        public static final int spinner_companys_ticks=0x7f09000d;
-        public static final int spinner_rem_companys_ticks=0x7f090015;
+        public static final int spinner_companys_ticks=0x7f09000e;
+        public static final int spinner_rem_companys_ticks=0x7f090016;
+        public static final int text_view_auto_complete=0x7f090009;
         public static final int tickNameSpinner=0x7f090008;
         public static final int username_txt=0x7f090001;
     }
@@ -88,42 +89,43 @@ public final class R {
         public static final int action_settings=0x7f060001;
         /**  Strings for the dialogs to add and remove share 
          */
-        public static final int add_share=0x7f06000a;
+        public static final int add_share=0x7f06000b;
         public static final int app_name=0x7f060000;
         public static final int hello_world=0x7f060002;
-        public static final int hint_type_share_company=0x7f060012;
+        public static final int hint_type_share_company=0x7f060013;
         /**  END Dialogs 
  MainActivity strings 
          */
-        public static final int my_shares_string_sign_in=0x7f060014;
-        public static final int my_shares_string_sign_up=0x7f060015;
-        public static final int negative_button_label=0x7f060011;
-        public static final int password_txt=0x7f060017;
-        public static final int periodicity_label=0x7f060006;
-        public static final int positive_add_button_label=0x7f06000f;
-        public static final int positive_remove_button_label=0x7f060010;
-        public static final int remove_share=0x7f06000b;
-        public static final int search_shares_string=0x7f060018;
-        public static final int see_evolution_button=0x7f060007;
-        public static final int share_add_info=0x7f060013;
-        public static final int share_evolution=0x7f060019;
-        public static final int tick_name_label=0x7f060005;
+        public static final int my_shares_string_sign_in=0x7f060015;
+        public static final int my_shares_string_sign_up=0x7f060016;
+        public static final int negative_button_label=0x7f060012;
+        public static final int password_txt=0x7f060018;
+        public static final int periodicity_label=0x7f060007;
+        public static final int positive_add_button_label=0x7f060010;
+        public static final int positive_remove_button_label=0x7f060011;
+        public static final int remove_share=0x7f06000c;
+        public static final int search_shares_string=0x7f060019;
+        public static final int see_evolution_button=0x7f060008;
+        public static final int share_add_info=0x7f060014;
+        public static final int share_evolution=0x7f06001a;
+        public static final int tick_name_label=0x7f060006;
         /**  END SelecQuotesEvolution 
          */
-        public static final int title_activity_add_shares=0x7f060009;
+        public static final int title_activity_add_shares=0x7f06000a;
+        public static final int title_activity_evolution_plot_xy=0x7f060005;
         /**  SelecQuotesEvolution Activity 
          */
         public static final int title_activity_select_quotes_evolution=0x7f060004;
         /**  End MainActivity 
          */
-        public static final int title_activity_simple_pie_chart=0x7f06001a;
+        public static final int title_activity_simple_pie_chart=0x7f06001b;
         public static final int title_activity_simple_xyplot=0x7f060003;
-        public static final int title_add_share=0x7f06000c;
-        public static final int title_evolution_graph=0x7f060008;
-        public static final int title_pie_chart=0x7f06001b;
-        public static final int title_remove_share=0x7f06000e;
-        public static final int title_sign_out=0x7f06000d;
-        public static final int username_txt=0x7f060016;
+        public static final int title_add_share=0x7f06000d;
+        public static final int title_evolution_graph=0x7f060009;
+        public static final int title_pie_chart=0x7f06001c;
+        public static final int title_remove_share=0x7f06000f;
+        public static final int title_sign_out=0x7f06000e;
+        public static final int username_txt=0x7f060017;
     }
     public static final class style {
         /** 

@@ -7,6 +7,7 @@
     <string name="title_activity_simple_xyplot">Graph Activity</string>
     <!-- SelecQuotesEvolution Activity -->
     <string name="title_activity_select_quotes_evolution">Share Evolution</string>
+    <string name="title_activity_evolution_plot_xy">Share Evolution Graph</string>
     <string name="tick_name_label">Select the tick name</string>
     <string name="periodicity_label">Select the periodicity</string>
     <string name="see_evolution_button">See share evolution</string>

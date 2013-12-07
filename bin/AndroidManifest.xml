@@ -30,11 +30,11 @@
         </activity>
         <!-- SimpleXYPlotActivity -->
         <activity
-            android:name="com.feup.cmov.shareportfolio.SimpleXYPlotActivity"
+            android:name="com.feup.cmov.shareportfolio.XYPlotActivity"
             android:label="@string/title_evolution_graph" >
         </activity>
         <activity
-            android:name="com.feup.cmov.shareportfolio.SimplePieChartActivity"
+            android:name="com.feup.cmov.shareportfolio.PieChartActivity"
             android:label="@string/title_activity_simple_pie_chart" >
         </activity>
     </application>

@@ -60,10 +60,10 @@ public class StockDataSource {
 		Cursor cursor = database.query(ShareDBHelper.TABLE_USER, new String[] {
 				"username", "password" }, "username=?",
 				new String[] { username }, null, null, null);
-		if (cursor != null) {
-			cursor.moveToFirst();
+		cursor.moveToFirst();
+		if(!cursor.isAfterLast())
 			return cursor.getString(1).equals(password);
-		} else
+		else 
 			return false;
 	}
 
