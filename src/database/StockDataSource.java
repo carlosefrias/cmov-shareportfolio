@@ -61,10 +61,11 @@ public class StockDataSource {
 				"username", "password" }, "username=?",
 				new String[] { username }, null, null, null);
 		cursor.moveToFirst();
+		boolean returnValue = false; 
 		if(!cursor.isAfterLast())
-			return cursor.getString(1).equals(password);
-		else 
-			return false;
+			returnValue = cursor.getString(1).equals(password);
+		cursor.close();
+		return returnValue;
 	}
 
 	public ArrayList<SimpleQuoteDB> getAllShares(String username) {

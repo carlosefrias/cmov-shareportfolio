@@ -10,6 +10,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -74,6 +76,7 @@ public class SelectQuotesEvolution extends Activity{
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
+				tickSelected = tickSpinner.getSelectedItem().toString();
 			}
 		});
         periodicitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -85,6 +88,23 @@ public class SelectQuotesEvolution extends Activity{
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+        textView.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				tickSelected = tickSpinner.getSelectedItem().toString();	
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				tickSelected = tickSpinner.getSelectedItem().toString();			
 			}
 		});
         button.setOnClickListener(new OnClickListener() {			

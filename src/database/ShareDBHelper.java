@@ -16,7 +16,7 @@ public class ShareDBHelper extends SQLiteOpenHelper{
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE Stock(companyID VARCHAR(5), shareNumber INT(4), username VARCHAR(20), correntValue DOUBLE(6));");
-		db.execSQL("CREATE TABLE User(username VARCHAR(20), password VARCHAR(20));");
+		db.execSQL("CREATE TABLE User(username VARCHAR(20) PRIMARY KEY, password VARCHAR(20) NOT NULL);");
 	}
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {

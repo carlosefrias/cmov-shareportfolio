@@ -130,18 +130,19 @@ public class PieChartActivity extends Activity {
 						}
 					}
 					if(arg0.getId() == spinner.getId()){
-						new Thread(new GetShareInfo((String)spinner.getSelectedItem())).start();
+						COMPANY_NAMESelected = spinner.getSelectedItem().toString();
+						new Thread(new GetShareInfo(COMPANY_NAMESelected)).start();
 					}
 				}
 				@Override
 				public void onNothingSelected(AdapterView<?> arg0) {
 				}});
 			spinner.setAdapter(adapter);
-			AutoCompleteTextView textView = (AutoCompleteTextView) layoutView.findViewById(R.id.share_edit_text);
-	        textView.setAdapter(adapter);
 			np.setMinValue(1);
 			np.setMaxValue(100);
-			ntBuilder.setView(layoutView);
+			AutoCompleteTextView textView = (AutoCompleteTextView) layoutView.findViewById(R.id.share_edit_text);
+			textView.setAdapter(adapter);
+	        ntBuilder.setView(layoutView);
 			ntBuilder.setPositiveButton(R.string.positive_add_button_label,
 					new DialogInterface.OnClickListener() {
 						@Override
