@@ -10,8 +10,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -72,11 +71,16 @@ public class SelectQuotesEvolution extends Activity{
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				if(arg0.getId() == tickSpinner.getId()){
 					tickSelected = tickSpinner.getSelectedItem().toString();
+					Log.v("DEBUG",""+tickSelected); 
 				}
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				tickSelected = tickSpinner.getSelectedItem().toString();
+				try{
+					tickSelected = tickSpinner.getSelectedItem().toString();
+				}catch(NullPointerException e){
+					
+				}
 			}
 		});
         periodicitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -88,23 +92,6 @@ public class SelectQuotesEvolution extends Activity{
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-        textView.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				tickSelected = tickSpinner.getSelectedItem().toString();	
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-			
-			@Override
-			public void afterTextChanged(Editable s) {
-				tickSelected = tickSpinner.getSelectedItem().toString();			
 			}
 		});
         button.setOnClickListener(new OnClickListener() {			
@@ -119,6 +106,7 @@ public class SelectQuotesEvolution extends Activity{
 					@Override
 					public void run() {
 						Date date_now = new Date();
+						tickSelected = tickSpinner.getSelectedItem().toString();
 						final ArrayList<Quote> array = RestApi.getQuotesHistory(tickSelected, date, date_now, periodicitySelected);
 						if(date_now.getTime() > date.getTime()){
 							runOnUiThread(new Runnable() {							
